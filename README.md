@@ -79,18 +79,3 @@ npm start
 
 - Recibe el pedido si fue aprobado por inventario.
 - Envía un mensaje final de estado al order-service indicando que el pedido está listo para despacho.
-
-## Iniciar los 3 servicios
-
-```
-start start-all.bat
-
-
-## Pruebas
-
-Cada vez que se ejecuta el order-service se crea un nuevo pedido con un artículo y una cantidad. El inventory-service evalúa si hay stock (aleatoriamente). Esto permite simular los siguientes escenarios:
-
-- Pedido rechazado por falta de inventario.
-- Pedido aceptado y enviado a despacho.
-
-El estado del pedido se muestra en consola dentro del order-service.
