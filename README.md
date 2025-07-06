@@ -43,10 +43,11 @@ amqp://usuario:clave123@localhost
 ```
 
 ### order-service
+Instalar dependencias
+npm install
 
 ```
 cd order-service
-npm install
 npm start
 ```
 
@@ -54,10 +55,11 @@ npm start
 - Escucha y muestra en consola cada cambio de estado del pedido.
 
 ### inventory-service
+Instalar dependencias
+npm install
 
 ```
 cd inventory-service
-npm install
 npm start
 ```
 
@@ -67,15 +69,21 @@ npm start
 - Si no hay stock, notifica el rechazo a order-service.
 
 ### delivery-service
+Instalar dependencias
+npm install
 
 ```
 cd delivery-service
-npm install
 npm start
 ```
 
 - Recibe el pedido si fue aprobado por inventario.
 - Envía un mensaje final de estado al order-service indicando que el pedido está listo para despacho.
+
+## Iniciar los 3 servicios
+
+```
+start start-all.bat
 
 
 ## Pruebas
