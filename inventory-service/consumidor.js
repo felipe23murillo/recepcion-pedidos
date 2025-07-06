@@ -1,9 +1,16 @@
 // Este módulo es el consumidor que escucha los pedidos de la cola de mensajes
-// y los procesa para actualizar el inventario.
-
+// y los procesa para actualizar el inventario real en memoria.
 
 const amqp = require('amqplib');
 const { enviarEstado, enviarADespacho } = require('./productor');
+
+// Inventario simulado en memoria
+const inventario = {
+  Teclado: 10,
+  Mouse: 5,
+  Monitor: 3,
+  Audífonos: 8
+};
 
 async function escucharPedidos() {
   const conexion = await amqp.connect('amqp://usuario:clave123@localhost');
@@ -16,20 +23,33 @@ async function escucharPedidos() {
     const pedido = JSON.parse(mensaje.content.toString());
     console.log('Pedido recibido en inventario:', pedido);
 
-    // Simulamos si hay inventario o no (aleatorio)
-    const hayStock = Math.random() > 0.3;
+    const { id, articulo, cantidad } = pedido;
+    const stockDisponible = inventario[articulo] || 0;
 
-    const estado = {
-      id: pedido.id,
-      paso: 'inventario',
-      estado: hayStock ? 'Disponible' : 'Sin stock'
-    };
+    if (stockDisponible >= cantidad) {
+      // Reducimos el stock
+      inventario[articulo] -= cantidad;
+      console.log(`${cantidad} unidad(es) de ${articulo} reservadas. Stock restante: ${inventario[articulo]}`);
 
-    await enviarEstado(estado);
+      const estado = {
+        id,
+        paso: 'inventario',
+        estado: 'Disponible'
+      };
 
-    // Si hay stock, lo pasamos a despacho
-    if (hayStock) {
+      await enviarEstado(estado);
       await enviarADespacho(pedido);
+    } else {
+      console.log(`No hay suficiente stock de ${articulo}. Disponibles: ${stockDisponible}`);
+
+      const estado = {
+        id,
+        paso: 'inventario',
+        estado: 'rechazado',
+        razon: 'Sin inventario'
+      };
+
+      await enviarEstado(estado);
     }
 
     canal.ack(mensaje);
