@@ -5,7 +5,7 @@ const { enviarPedidoAInventario } = require('./productor');
 const { escucharEstadosDelPedido } = require('./consumidor');
 
 const pedido = {
-  id: Date.now(),
+  id: 18127121,
   articulo: 'Teclado',
   cantidad: 2
 };
