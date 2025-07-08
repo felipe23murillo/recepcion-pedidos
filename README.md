@@ -32,11 +32,10 @@ Contraseña: clave123
 Cada microservicio se ejecuta en una terminal distinta. En cada uno:
 
 ```
-npm install
 npm start
 ```
 
-Asegúrate de que cada archivo que se conecta a RabbitMQ lo haga directamente con la siguiente URL:
+El archivo se conecta a RabbitMQ directamente con la siguiente URL:
 
 ```js
 amqp://usuario:clave123@localhost
